@@ -1,51 +1,52 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import axios from 'axios';
 import AlbumDetail from './AlbumDetail';
+import { useNavigation } from '@react-navigation/native';
 
-class AlbumList extends Component {
-  state = { photoset: null };
+function AlbumList(){
 
-  componentWillMount() {
-    axios
-      .get(
-        'https://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=6e8a597cb502b7b95dbd46a46e25db8d&user_id=137290658%40N08&format=json&nojsoncallback=1',
-      )
-      .then(response =>
-        this.setState({photoset: response.data.photosets.photoset}),
-      );
-  }
+  const [photoSet, setPhotoSet] = useState({ photoset: null });
 
-  renderAlbums() {
-    return this.state.photoset.map(album => (
+  const navigation = useNavigation()
+
+  const renderAlbums = () => {
+    return photoSet.photoset.map(album => (
       <AlbumDetail
-        navigation={this.props.navigation}
+        navigation={navigation}
         key={album.id}
         title={album.title._content}
         albumId={album.id}
       />
     ));
-  }
+};
 
-  render() {
-    console.log(this.state);
+  useEffect(() => {
+  axios
+      .get(
+        'https://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=6e8a597cb502b7b95dbd46a46e25db8d&user_id=137290658%40N08&format=json&nojsoncallback=1',
+      )
+      .then(response =>
+        setPhotoSet({photoset: response.data.photosets.photoset}),
+      );
+    }, [navigation]);
+  
+    console.log(photoSet);
 
-    if (!this.state.photoset) {
-			return (
-					<Text>
-            Loading...
-					</Text>
-				);
+
+    if (photoSet.photoset === null) {
+        return (<Text>
+          Loading...
+        </Text>)
     }
 
     return (
       <View style={{ flex: 1 }}>
         <ScrollView>
-          {this.renderAlbums()}
+          {renderAlbums()}
         </ScrollView>
       </View>
     );
-  }
-}
+  };
 
 export default AlbumList;
