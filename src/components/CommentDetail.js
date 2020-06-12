@@ -2,29 +2,29 @@ import React from 'react';
 import { Text, View, Image, Linking } from 'react-native';
 import Card from './Card';
 import CardSection from './CardSection';
-import Button from './Button';
 
-const AlbumDetail = ({ navigation, title, albumId }) => {
+const CommentDetail = ({ author, content }) => {
   const {
+    thumbnailStyle,
     headerContentStyle,
+    thumbnailContainerStyle,
     headerTextStyle,
-    imageStyle
+    imageStyle,
+    childContentStyle,
+    childTextStyle
   } = styles;
 
   return (
     <Card>
       <CardSection>
         <View style={headerContentStyle}>
-          <Text style={headerTextStyle}>{title}</Text>
-          
+          <Text style={headerTextStyle}>{author}</Text>
         </View>
       </CardSection>
-
       <CardSection>
-        <Button
-          onPress={() => navigation.navigate('photoList', {albumId: albumId})}>
-          See Now!
-        </Button>
+        <View style={headerContentStyle}>
+          <Text style={childTextStyle}>{content}</Text>
+        </View>
       </CardSection>
     </Card>
   );
@@ -38,15 +38,12 @@ const styles = {
   headerTextStyle: {
     fontSize: 18
   },
-  thumbnailStyle: {
-    height: 50,
-    width: 50
+  childContentStyle: {
+    flexDirection: 'column',
+    justifyContent: 'space-around'
   },
-  thumbnailContainerStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 10,
-    marginRight: 10
+  childTextStyle: {
+    fontSize: 14
   },
   imageStyle: {
     height: 300,
@@ -55,4 +52,4 @@ const styles = {
   }
 };
 
-export default AlbumDetail;
+export default CommentDetail;

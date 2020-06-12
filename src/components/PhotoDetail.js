@@ -3,8 +3,9 @@ import { Text, View, Image, Linking } from 'react-native';
 import Card from './Card';
 import CardSection from './CardSection';
 import Button from './Button';
+import { useNavigation } from '@react-navigation/native';
 
-const PhotoDetail = ({ title, imageUrl }) => {
+const PhotoDetail = ({ title, imageUrl, photoId }) => {
   const {
     thumbnailStyle,
     headerContentStyle,
@@ -12,6 +13,8 @@ const PhotoDetail = ({ title, imageUrl }) => {
     headerTextStyle,
     imageStyle
   } = styles;
+
+  const navigation = useNavigation()
 
   return (
     <Card>
@@ -38,6 +41,9 @@ const PhotoDetail = ({ title, imageUrl }) => {
       <CardSection>
         <Button onPress={() => Linking.openURL(imageUrl)}>
           See Now!
+        </Button>
+        <Button onPress={() => navigation.navigate('comments', {photoId: photoId})}>
+          Comments
         </Button>
       </CardSection>
     </Card>
